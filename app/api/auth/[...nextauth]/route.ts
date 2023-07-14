@@ -33,6 +33,7 @@ const authOption: NextAuthOptions = {
 				},
 				update: {
 					name: profile.name,
+					avatar: (profile as any).picture,
 				},
 			});
 			console.log('user', user);

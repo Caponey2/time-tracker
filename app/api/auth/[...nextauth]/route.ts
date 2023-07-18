@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { NextAuthOptions } from 'next-auth';
 import NextAuth from 'next-auth/next';
 import GoogleProvider from 'next-auth/providers/google';
+import { session } from '@/lib/auth';
 
 const authOption: NextAuthOptions = {
 	session: {
@@ -38,6 +39,26 @@ const authOption: NextAuthOptions = {
 			});
 			console.log('user', user);
 			return true;
+		},
+		session,
+		async jwt({ token, account, profile, user }) {
+			// Persist the OAuth access_token and or the user id to the token right after signin
+			console.log({ token, account, profile, user });
+			if (profile) {
+				const user = await prisma.user.findUnique({
+					where: {
+						email: profile.email,
+					},
+				});
+				if (!user) {
+					throw new Error('No User Found');
+				}
+				token.id = user.id;
+				token.tenant = {
+					id: user.tenantId,
+				};
+			}
+			return token;
 		},
 	},
 };

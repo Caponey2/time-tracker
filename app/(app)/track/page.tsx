@@ -59,7 +59,7 @@ const NewActivity = ({ activity }: NewActivityProps) => {
 				<Input name='name' defaultValue={activity?.name || ''} />
 				<Input type='hidden' name='id' value={activity?.id || ''} />
 				{activity && <Time startAt={activity.startAt.toString()} />}
-				<Button type='submit'>{activity ? 'Stop' : 'Start'}</Button>
+				<Button type='submit'>{activity ? 'End' : 'Start'}</Button>
 			</form>
 		</div>
 	);
